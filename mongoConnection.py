@@ -7,5 +7,5 @@ mongo = pymongo.MongoClient(
 )
 db = mongo["geolocation"]
 col = db["geolocation"]
-mongo.server_info()
 
+#print(mongo.admin.command('replSetGetStatus', check=False))

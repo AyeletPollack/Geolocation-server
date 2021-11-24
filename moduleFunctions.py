@@ -3,9 +3,9 @@ from mongoMethods import *
 
 def is_open():
     try:
-        mongo.server_info()
-    except:
-        raise Exception("Error - DB not connected")
+        check_connection()
+    except Exception as ex:
+        raise Exception(ex)
 
 
 def get_distance_from_api(source,destination):
@@ -18,6 +18,7 @@ def get_most_popular():
     try:
         is_open()
         all_data = find_all()
+        print(all_data)
         most_popular = {}
         hits = -1
         for i in all_data:

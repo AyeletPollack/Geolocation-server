@@ -1,17 +1,15 @@
 from flask import Flask, request, Response
 import json
-from mongoMethods import is_open
-from mongoMethods import get_distance_
-from mongoMethods import get_most_popular
-from mongoMethods import insert_to_db
-
+from moduleFunctions import *
 
 app = Flask(__name__)
+
 
 ######## API 1 ########
 @app.route('/home', methods=['GET'])
 def get_home():
     return Response(status=200)
+
 
 ######## API 2 ########
 @app.route('/distance', methods=['GET'])
@@ -27,32 +25,33 @@ def get_distance():
         return Response(response=json.dumps({"distance": str(distance)}), status=200)
 
     except Exception as ex:
-        print(str(ex))
         return Response(response=json.dumps({"message": str(ex)}), status=200)
 
+
 ######## API 3 ########
-@app.route('/health')
+@app.route('/health', methods=['GET'])
 def get_health():
     try:
         is_open()
         return Response(status=200)
 
     except Exception as ex:
-        return Response(response=json.dumps({"message": ex}), status=500)
+        return Response(response=json.dumps({"message": str(ex)}), status=500)
+
 
 ######## API 4 ########
-@app.route('/popularsearch')
+@app.route('/popularsearch', methods=['GET'])
 def get_popular_search():
     try:
         popular = get_most_popular()
-        print(popular)
         if popular != {}:
             return Response(response=json.dumps({"source": popular["locationA"], "destination": popular["locationB"], "hits": popular["hits"]}), status=201)
         else:
             return Response(response=json.dumps({"message": "NO data in Data Base"}), status=201)
 
     except Exception as ex:
-        return Response(response=json.dumps({"message": ex}), status=500)
+        return Response(response=json.dumps({"message": str(ex)}), status=500)
+
 
 ######## API 5 ########
 @app.route('/distance', methods=["POST"])
@@ -73,7 +72,7 @@ def create_distance():
         return Response(response=json.dumps({"source": source, "destination": destination, "hits": popular["hits"]}), status=201)
 
     except Exception as ex:
-        return Response(response=json.dumps({"message": ex}), status=500)
+        return Response(response=json.dumps({"message": str(ex)}), status=500)
 
 
 if __name__ == '__main__':
