@@ -32,7 +32,8 @@ def find_all():
     return list(col.find())
 
 
-
+def find_max_hits():
+    return col.find_one(sort=[("hits", -1)])
 
 
 

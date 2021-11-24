@@ -17,15 +17,7 @@ def get_distance_from_api(source,destination):
 def get_most_popular():
     try:
         is_open()
-        all_data = find_all()
-        print(all_data)
-        most_popular = {}
-        hits = -1
-        for i in all_data:
-            if int(i['hits']) > hits:
-                most_popular = i
-                hits = int(i['hits'])
-        return most_popular
+        return find_max_hits()
 
     except Exception as ex:
         raise Exception(ex)
