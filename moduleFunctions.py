@@ -9,9 +9,12 @@ def is_open():
 
 
 def get_distance_from_api(source,destination):
-    url = 'https://www.mapquestapi.com/directions/v2/route?'
-    response = requests.get(url + '&key=' + 'WrpxFLt5PZa7hQHLBZr1TBMsFjFAzlN3' + '&from=' + source + '&to=' + destination)
-    return response.json()['route']['distance']
+    try:
+        url = 'https://www.mapquestapi.com/directions/v2/route?'
+        response = requests.get(url + '&key=' + 'WrpxFLt5PZa7hQHLBZr1TBMsFjFAzlN3' + '&from=' + source + '&to=' + destination)
+        return response.json()['route']['distance']
+    except Exception as ex:
+        raise Exception(ex)
 
 
 def get_most_popular():
@@ -39,13 +42,17 @@ def get_distance_(source, destination):
 
 
 def insert_to_db(source, destination, numberOfKMs, check_exists):
-    if not check_exists:
-        insert(source, destination, numberOfKMs)
-    else:
-        dbResponse = get_location(source, destination)
-        if dbResponse != []:
-            update_distance(dbResponse[0]["_id"], numberOfKMs)
-            return get_location(source, destination)[0]
-        else:
+    try:
+        if not check_exists:
             insert(source, destination, numberOfKMs)
-        return get_location(source, destination)[0]
+        else:
+            dbResponse = get_location(source, destination)
+            if dbResponse != []:
+                update_distance(dbResponse[0]["_id"], numberOfKMs)
+                return get_location(source, destination)[0]
+            else:
+                insert(source, destination, numberOfKMs)
+            return get_location(source, destination)[0]
+
+    except Exception as ex:
+        raise Exception(ex)
